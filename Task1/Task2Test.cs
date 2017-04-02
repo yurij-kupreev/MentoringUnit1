@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Task1
@@ -29,10 +27,10 @@ namespace Task1
     {
       public Mapper<TSource, TDestination> Generate<TSource, TDestination>()
       {
-        var sourceFields = typeof(TSource).GetProperties().Select(item => item.Name).ToList();
-        var destinationFields = typeof(TDestination).GetProperties().Select(item => item.Name).ToList();
+        var sourceFields = typeof(TSource).GetProperties().Select(item => item.Name);
+        var destinationFields = typeof(TDestination).GetProperties().Select(item => item.Name);
 
-        var fieldsToMap = destinationFields.Intersect(sourceFields).ToList();
+        var fieldsToMap = destinationFields.Intersect(sourceFields);
 
         var sourceParam = Expression.Parameter(typeof(TSource));
 
@@ -56,6 +54,8 @@ namespace Task1
       public int A { get; set; }
 
       public int B { get; set; }
+
+      public string C { get; set; }
     }
 
     public class Bar
@@ -63,6 +63,8 @@ namespace Task1
       public int A { get; set; }
 
       public int B { get; set; }
+
+      public string C { get; set; }
     }
 
     [TestMethod]
@@ -74,10 +76,11 @@ namespace Task1
       var res = mapper.Map(new Foo
       {
         A = 1,
-        B = 2
+        B = 2,
+        C = "qwerty"
       });
 
-      Console.WriteLine(res.A + " " + res.B);
+      Console.WriteLine($"{res.A} {res.B} {res.C}");
     }
   }
 }
